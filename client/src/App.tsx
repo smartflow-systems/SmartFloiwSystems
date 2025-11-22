@@ -3,6 +3,7 @@ import { Logo } from './components/Logo'
 import { HealthCheck } from './components/HealthCheck'
 import { Hamburger } from './components/Hamburger'
 import { Sidebar } from './components/Sidebar'
+import { CircuitNodes } from './components/CircuitNodes'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -15,6 +16,7 @@ function App() {
 
   return (
     <div>
+      <CircuitNodes />
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="content-wrapper">
