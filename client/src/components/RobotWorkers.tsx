@@ -8,7 +8,9 @@ export function RobotWorkers() {
     action: 'pointing' | 'reading' | 'celebrating'
     vx: number
     vy: number
-    rotation: number
+    rotationX: number
+    rotationY: number
+    rotationZ: number
   }>>([])
 
   useEffect(() => {
@@ -20,7 +22,9 @@ export function RobotWorkers() {
         action: ['pointing', 'reading', 'celebrating'][Math.floor(Math.random() * 3)] as 'pointing' | 'reading' | 'celebrating',
         vx: (Math.random() - 0.5) * 2,
         vy: (Math.random() - 0.5) * 2,
-        rotation: Math.random() * 360,
+        rotationX: -20 - Math.random() * 30,
+        rotationY: -30 + Math.random() * 60,
+        rotationZ: -10 + Math.random() * 20,
       }))
     )
   }, [])
@@ -55,7 +59,9 @@ export function RobotWorkers() {
             vx,
             vy,
             action,
-            rotation: robot.rotation + (vx * 2),
+            rotationX: robot.rotationX + (vy * 0.5),
+            rotationY: robot.rotationY + (vx * 2),
+            rotationZ: robot.rotationZ + (Math.random() - 0.5) * 2,
           }
         })
       )
@@ -65,7 +71,7 @@ export function RobotWorkers() {
   }, [])
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-5" style={{ perspective: '1200px' }}>
+    <div className="pointer-events-none fixed inset-0 z-5" style={{ perspective: '1800px' }}>
       {robots.map((robot) => (
         <div
           key={robot.id}
@@ -73,70 +79,74 @@ export function RobotWorkers() {
           style={{
             left: `${robot.x}px`,
             top: `${robot.y}px`,
-            transform: `perspective(1200px) rotateY(${robot.rotation * 0.5}deg) rotateZ(${robot.action === 'celebrating' ? Math.sin(Date.now() / 200) * 10 : 0}deg)`,
+            transform: `perspective(1800px) rotateX(${robot.rotationX}deg) rotateY(${robot.rotationY}deg) rotateZ(${robot.rotationZ}deg)`,
+            transformStyle: 'preserve-3d',
           }}
         >
-          {/* Main body container */}
-          <div className={`robot-body 3d robot-${robot.action}`}>
-            {/* Head with visor */}
-            <div className="robot-head-3d">
-              <div className="head-main">
-                <div className="head-visor-outer">
-                  <div className="head-visor-inner">
-                    <div className="eye eye-left" />
-                    <div className="eye eye-right" />
-                  </div>
-                </div>
+          {/* Main body container with full 3D */}
+          <div className={`robot-body-3d robot-${robot.action}`} style={{ transformStyle: 'preserve-3d' }}>
+            {/* Head */}
+            <div className="head-3d" style={{ transformStyle: 'preserve-3d' }}>
+              <div className="head-front" />
+              <div className="head-back" />
+              <div className="head-left" />
+              <div className="head-right" />
+              <div className="head-top" />
+              <div className="visor-frame">
+                <div className="eye eye-left" />
+                <div className="eye eye-right" />
               </div>
-              <div className="head-chin" />
             </div>
 
-            {/* Neck connector */}
-            <div className="neck-connector" />
+            {/* Neck */}
+            <div className="neck-3d" style={{ transformStyle: 'preserve-3d' }} />
 
-            {/* Torso */}
-            <div className="torso-main">
-              <div className="torso-front">
-                <div className="panel-light" />
-                <div className="panel-dark" />
-                <div className="panel-light" />
-              </div>
-              <div className="torso-left-side" />
-              <div className="torso-right-side" />
+            {/* Torso - lounging angle */}
+            <div className="torso-3d" style={{ transformStyle: 'preserve-3d' }}>
+              <div className="torso-front" />
+              <div className="torso-back" />
+              <div className="torso-left" />
+              <div className="torso-right" />
+              <div className="torso-top" />
+              <div className="torso-bottom" />
+              
+              {/* Panel details on front */}
+              <div className="panel-1" />
+              <div className="panel-2" />
             </div>
 
-            {/* Shoulders and arms */}
-            <div className="shoulders">
-              <div className="shoulder-left">
-                <div className={`arm-upper left ${robot.action === 'celebrating' ? 'raised' : robot.action === 'pointing' ? 'extended' : 'neutral'}`}>
-                  <div className={`arm-lower left ${robot.action === 'celebrating' ? 'raised' : robot.action === 'pointing' ? 'extended' : 'neutral'}`}>
-                    <div className="hand left" />
-                  </div>
-                </div>
-              </div>
-              <div className="shoulder-right">
-                <div className={`arm-upper right ${robot.action === 'celebrating' ? 'raised' : 'neutral'}`}>
-                  <div className={`arm-lower right ${robot.action === 'celebrating' ? 'raised' : 'neutral'}`}>
-                    <div className="hand right" />
-                  </div>
+            {/* Left arm */}
+            <div className={`arm-left arm-3d ${robot.action === 'celebrating' ? 'raised' : robot.action === 'pointing' ? 'extended' : 'neutral'}`} style={{ transformStyle: 'preserve-3d' }}>
+              <div className="arm-segment-upper" style={{ transformStyle: 'preserve-3d' }}>
+                <div className="arm-segment-lower" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="hand-left" />
                 </div>
               </div>
             </div>
 
-            {/* Hips */}
-            <div className="hips">
-              <div className="hip-left">
-                <div className="leg-upper left">
-                  <div className="leg-lower left">
-                    <div className="foot left" />
-                  </div>
+            {/* Right arm */}
+            <div className={`arm-right arm-3d ${robot.action === 'celebrating' ? 'raised' : 'neutral'}`} style={{ transformStyle: 'preserve-3d' }}>
+              <div className="arm-segment-upper" style={{ transformStyle: 'preserve-3d' }}>
+                <div className="arm-segment-lower" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="hand-right" />
                 </div>
               </div>
-              <div className="hip-right">
-                <div className="leg-upper right">
-                  <div className="leg-lower right">
-                    <div className="foot right" />
-                  </div>
+            </div>
+
+            {/* Left leg - lounging */}
+            <div className="leg-left leg-3d" style={{ transformStyle: 'preserve-3d' }}>
+              <div className="leg-upper-left" style={{ transformStyle: 'preserve-3d' }}>
+                <div className="leg-lower-left" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="foot-left" />
+                </div>
+              </div>
+            </div>
+
+            {/* Right leg - lounging */}
+            <div className="leg-right leg-3d" style={{ transformStyle: 'preserve-3d' }}>
+              <div className="leg-upper-right" style={{ transformStyle: 'preserve-3d' }}>
+                <div className="leg-lower-right" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="foot-right" />
                 </div>
               </div>
             </div>
