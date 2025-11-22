@@ -12,7 +12,7 @@
 }
 
 @layer base {
-  html, body {
+  html, body, #root {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -20,8 +20,8 @@
   }
 
   body {
-    @apply bg-sfs-black text-white overflow-x-hidden;
     font-family: var(--font-sans);
+    overflow-x: hidden;
   }
   
   h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; }
@@ -30,100 +30,103 @@
   p { line-height: 1.6; }
 }
 
-/* DEEP SPACE + CIRCUIT FLOW BACKGROUND */
-.circuit-bg {
+/* ========== DEEP SPACE CIRCUIT BACKGROUND ========== */
+#root {
+  background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 40%, #1a1410 100%);
+  position: relative;
+  min-height: 100vh;
+}
+
+#root::before {
+  content: '';
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 40%, #1a1410 100%);
-  z-index: 0;
-  overflow: hidden;
-}
-
-/* Animated Grid Lines */
-.circuit-bg::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
   width: 200%;
   height: 200%;
   background-image: 
-    linear-gradient(90deg, rgba(255, 215, 0, 0.08) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255, 215, 0, 0.08) 1px, transparent 1px);
-  background-size: 100px 100px;
-  animation: flowGrid 60s linear infinite;
-  opacity: 0.6;
+    linear-gradient(90deg, rgba(255, 215, 0, 0.12) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 215, 0, 0.12) 1px, transparent 1px);
+  background-size: 120px 120px;
+  animation: flowGridLines 120s linear infinite;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1;
 }
 
-/* Radial Circuit Dots */
-.circuit-bg::after {
+#root::after {
   content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 200%;
   height: 200%;
-  background-image: radial-gradient(circle, rgba(255, 215, 0, 0.15) 2px, transparent 2px);
-  background-size: 80px 80px;
+  background-image: radial-gradient(circle, rgba(255, 215, 0, 0.2) 3px, transparent 3px);
+  background-size: 100px 100px;
   background-position: 0 0;
-  animation: flowDots 80s linear infinite;
-  opacity: 0.5;
+  animation: flowCircuits 150s linear infinite;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: -1;
 }
 
-@keyframes flowGrid {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(100px, 100px); }
+@keyframes flowGridLines {
+  0% { 
+    transform: translate(0, 0);
+    background-position: 0 0;
+  }
+  100% { 
+    transform: translate(120px, 120px);
+    background-position: 120px 120px;
+  }
 }
 
-@keyframes flowDots {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(80px, 80px); }
+@keyframes flowCircuits {
+  0% { 
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% { 
+    transform: translate(100px, 100px) scale(1);
+  }
 }
 
-/* Extra circuit layer */
-.circuit-bg {
-  background: 
-    linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 40%, #1a1410 100%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><defs><pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,215,0,0.1)"/><circle cx="50" cy="50" r="1" fill="rgba(255,215,0,0.1)"/><circle cx="90" cy="90" r="1" fill="rgba(255,215,0,0.1)"/><line x1="10" y1="10" x2="50" y2="50" stroke="rgba(255,215,0,0.05)" stroke-width="0.5"/><line x1="50" y1="50" x2="90" y2="90" stroke="rgba(255,215,0,0.05)" stroke-width="0.5"/></pattern></defs><rect fill="url(%23circuit)" width="100" height="100"/></svg>');
-  background-repeat: repeat;
-  background-attachment: fixed;
-}
-
-/* Content wrapper above circuit */
+/* Content stays above circuit */
 .content-wrapper {
   position: relative;
   z-index: 1;
+  background: transparent;
 }
 
-/* Premium Glassmorphism */
+/* Glass Cards */
 .glass-card {
-  background: rgba(59, 47, 47, 0.08);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 215, 0, 0.1);
+  background: rgba(59, 47, 47, 0.1);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 215, 0, 0.12);
   border-radius: 1rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .glass-card-hover {
-  background: rgba(59, 47, 47, 0.12);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  background: rgba(59, 47, 47, 0.15);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
   border-radius: 1rem;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .glass-card-hover:hover {
-  background: rgba(59, 47, 47, 0.2);
+  background: rgba(59, 47, 47, 0.25);
   border-color: rgba(255, 215, 0, 0.4);
-  box-shadow: 0 30px 80px rgba(255, 215, 0, 0.15);
-  transform: translateY(-4px);
+  box-shadow: 0 30px 80px rgba(255, 215, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-6px);
 }
 
-/* Premium Buttons */
+/* Buttons */
 .sfs-button {
   background-color: #FFD700;
   color: #0D0D0D;
@@ -134,13 +137,17 @@
   cursor: pointer;
   border: none;
   font-size: 1rem;
-  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
 }
 
 .sfs-button:hover {
   background-color: #E6C200;
-  box-shadow: 0 15px 35px rgba(255, 215, 0, 0.35);
-  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+  transform: translateY(-3px);
+}
+
+.sfs-button:active {
+  transform: translateY(-1px);
 }
 
 .sfs-button-outline {
@@ -158,6 +165,7 @@
 .sfs-button-outline:hover {
   background-color: #FFD700;
   color: #0D0D0D;
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
 }
 
 /* Sidebar */
@@ -167,9 +175,9 @@
   top: 0;
   height: 100%;
   width: 16rem;
-  background: rgba(59, 47, 47, 0.1);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(255, 215, 0, 0.1);
+  background: rgba(59, 47, 47, 0.15);
+  backdrop-filter: blur(25px);
+  border-right: 1px solid rgba(255, 215, 0, 0.15);
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
   z-index: 50;
@@ -188,6 +196,8 @@
   padding: 0.5rem;
   border-radius: 0.5rem;
   transition: background-color 0.2s;
+  border: none;
+  background: transparent;
 }
 
 .hamburger:hover {
@@ -224,6 +234,9 @@
   transition: all 0.2s;
   cursor: pointer;
   text-decoration: none;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
 }
 
 .nav-item:hover {
@@ -239,13 +252,15 @@
 
 /* Text Effects */
 .text-glow {
-  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 60px rgba(255, 215, 0, 0.3);
+  text-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 80px rgba(255, 215, 0, 0.3);
   color: #FFD700;
 }
 
 /* Layout */
 section {
   padding: 5rem 0;
+  position: relative;
+  z-index: 1;
 }
 
 .feature-grid {
@@ -271,18 +286,20 @@ section {
 
 /* Header */
 header {
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
   position: relative;
   z-index: 30;
+  background: rgba(59, 47, 47, 0.1);
 }
 
 /* Footer */
 footer {
-  border-top: 1px solid rgba(255, 215, 0, 0.1);
-  background: rgba(59, 47, 47, 0.05);
+  border-top: 1px solid rgba(255, 215, 0, 0.15);
+  background: rgba(59, 47, 47, 0.08);
   position: relative;
   z-index: 5;
+  backdrop-filter: blur(15px);
 }
 
 main {

@@ -7,8 +7,14 @@ import { Sidebar } from './components/Sidebar'
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  const scrollTo = (id: string) => {
+    setSidebarOpen(false)
+    const element = document.getElementById(id)
+    element?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
-    <div className="min-h-screen circuit-bg sfs-gradient">
+    <div>
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="content-wrapper">
@@ -20,7 +26,7 @@ function App() {
                 <Hamburger isOpen={sidebarOpen} onClick={() => setSidebarOpen(!sidebarOpen)} />
                 <h2 className="text-lg font-bold text-sfs-gold hidden sm:block">SFS Genesis</h2>
               </div>
-              <button className="sfs-button px-6 py-2" data-testid="button-header-cta">Get Started</button>
+              <button className="sfs-button px-6 py-2" onClick={() => scrollTo('pricing')} data-testid="button-header-cta">Get Started</button>
             </div>
           </div>
         </header>
@@ -28,7 +34,7 @@ function App() {
         {/* Main Content */}
         <main>
           {/* Hero Section */}
-          <section className="container mx-auto px-6 py-24">
+          <section id="hero" className="container mx-auto px-6 py-24">
             <div className="text-center max-w-4xl mx-auto">
               <Logo />
               <h1 className="mt-8 mb-6 text-sfs-gold text-glow">
@@ -38,14 +44,14 @@ function App() {
                 AI social bots, one-click booking, conversion-ready shops, and slick websites — all prebuilt, branded, and fast.
               </p>
               <div className="flex gap-4 justify-center flex-wrap">
-                <button className="sfs-button" data-testid="button-hero-systems">See the Systems</button>
-                <button className="sfs-button-outline" data-testid="button-hero-pricing">Pricing</button>
+                <button className="sfs-button" onClick={() => scrollTo('projects')} data-testid="button-hero-systems">See the Systems</button>
+                <button className="sfs-button-outline" onClick={() => scrollTo('pricing')} data-testid="button-hero-pricing">Pricing</button>
               </div>
             </div>
           </section>
 
           {/* Projects Section */}
-          <section className="container mx-auto px-6">
+          <section id="projects" className="container mx-auto px-6">
             <h2 className="text-center text-sfs-gold mb-16">Projects</h2>
             <div className="feature-grid">
               <div className="glass-card-hover p-8" data-testid="project-aibot">
@@ -189,7 +195,7 @@ function App() {
           </section>
 
           {/* Testimonials */}
-          <section className="container mx-auto px-6 py-24">
+          <section id="testimonials" className="container mx-auto px-6 py-24">
             <h2 className="text-center text-sfs-gold mb-16">Social Proof</h2>
             <div className="testimonial-grid">
               <div className="glass-card p-10" data-testid="testimonial-1">
@@ -217,7 +223,7 @@ function App() {
           </section>
 
           {/* Pricing */}
-          <section className="container mx-auto px-6 py-24">
+          <section id="pricing" className="container mx-auto px-6 py-24">
             <h2 className="text-center text-sfs-gold mb-16">Get Started</h2>
             <div className="pricing-grid">
               <div className="glass-card p-8" data-testid="pricing-starter">
