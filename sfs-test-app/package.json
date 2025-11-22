@@ -1,0 +1,30 @@
+{
+  "name": "sfs-test-app",
+  "version": "1.0.0",
+  "description": "Test application to verify generator works",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port ${PORT:-5000}",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port ${PORT:-5000}",
+    "health": "node scripts/health.js"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.4.49",
+    "autoprefixer": "^10.4.20"
+  },
+  "keywords": ["smartflow-systems", "sfs", "react", "typescript"],
+  "author": "boweazy (SmartFlow Systems)",
+  "license": "PROPRIETARY"
+}
