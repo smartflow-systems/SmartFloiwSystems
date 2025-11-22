@@ -67,15 +67,26 @@ body::before {
 
 /* ========== SILLY ROBOT WORKERS ========== */
 .robot-worker {
-  position: fixed;
   width: 35px;
   height: 45px;
-  left: var(--start-x);
-  top: var(--start-y);
-  animation: robotDash var(--duration) ease-in-out infinite;
-  animation-delay: var(--delay);
-  opacity: 0.85;
+  opacity: 0.9;
   pointer-events: none;
+  z-index: 5;
+}
+
+.robot-worker.robot-pointing {
+  animation: pointingAnimation var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.robot-worker.robot-reading {
+  animation: readingAnimation var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.robot-worker.robot-celebrating {
+  animation: celebratingAnimation var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
 }
 
 .robot-body {
@@ -130,7 +141,18 @@ body::before {
   height: 2px;
   background: #0D0D0D;
   border-radius: 1px;
-  animation: smile 1.2s ease-in-out infinite;
+}
+
+.robot-mouth.neutral {
+  animation: neutralSmile 1.2s ease-in-out infinite;
+}
+
+.robot-mouth.focused {
+  animation: focusedExpression 1.5s ease-in-out infinite;
+}
+
+.robot-mouth.excited {
+  animation: excitedSmile 0.8s ease-in-out infinite;
 }
 
 .robot-torso {
@@ -172,6 +194,7 @@ body::before {
   border-radius: 2px;
   border: 1px solid #3B2F2F;
   animation: armWave 0.8s ease-in-out infinite;
+  transform-origin: top center;
 }
 
 .robot-arm.left {
@@ -180,6 +203,17 @@ body::before {
 
 .robot-arm.right {
   animation-delay: 0.2s;
+}
+
+.robot-arm.pointing-arm {
+  animation: pointingGesture 1.2s ease-in-out infinite !important;
+  animation-delay: 0s !important;
+  height: 10px;
+}
+
+.robot-arm.celebrating-arm {
+  animation: celebratingGesture 0.6s ease-in-out infinite !important;
+  height: 10px;
 }
 
 .robot-legs {
@@ -209,35 +243,52 @@ body::before {
   animation-delay: 0.1s;
 }
 
-@keyframes robotDash {
-  0% {
-    left: var(--start-x);
-    top: var(--start-y);
-    opacity: 0.85;
+@keyframes pointingAnimation {
+  0%, 100% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.9;
   }
   25% {
-    left: calc(var(--start-x) + 30vw);
-    top: calc(var(--start-y) - 25vh);
-    opacity: 0.7;
-    transform: scaleX(-1) rotate(15deg);
+    transform: translateY(-3px) scaleX(1);
+    opacity: 0.95;
   }
   50% {
-    left: calc(var(--start-x) - 25vw);
-    top: calc(var(--start-y) + 30vh);
-    opacity: 0.75;
-    transform: scaleX(1) rotate(-10deg);
+    transform: translateY(2px) scaleX(1);
+    opacity: 0.85;
   }
   75% {
-    left: calc(var(--start-x) + 20vw);
-    top: calc(var(--start-y) - 15vh);
-    opacity: 0.8;
-    transform: scaleX(-1) rotate(10deg);
+    transform: translateY(-1px) scaleX(1);
+    opacity: 0.92;
   }
-  100% {
-    left: var(--start-x);
-    top: var(--start-y);
-    opacity: 0.85;
-    transform: scaleX(1) rotate(0deg);
+}
+
+@keyframes readingAnimation {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-2px) scale(1.02);
+    opacity: 0.95;
+  }
+}
+
+@keyframes celebratingAnimation {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+  25% {
+    transform: translateY(-8px) scale(1.05);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translateY(-6px) rotate(5deg);
+    opacity: 0.95;
   }
 }
 
@@ -259,7 +310,7 @@ body::before {
   }
 }
 
-@keyframes smile {
+@keyframes neutralSmile {
   0%, 100% {
     width: 6px;
     opacity: 1;
@@ -267,6 +318,32 @@ body::before {
   50% {
     width: 7px;
     opacity: 0.8;
+  }
+}
+
+@keyframes focusedExpression {
+  0%, 100% {
+    width: 4px;
+    height: 3px;
+    opacity: 0.8;
+  }
+  50% {
+    width: 5px;
+    height: 2px;
+    opacity: 1;
+  }
+}
+
+@keyframes excitedSmile {
+  0%, 100% {
+    width: 8px;
+    height: 3px;
+    opacity: 1;
+  }
+  50% {
+    width: 9px;
+    height: 3px;
+    opacity: 0.9;
   }
 }
 
@@ -282,6 +359,30 @@ body::before {
   }
   75% {
     transform: rotate(-25deg) translateY(-1px);
+  }
+}
+
+@keyframes pointingGesture {
+  0%, 100% {
+    transform: rotate(-45deg) translateY(-3px);
+  }
+  50% {
+    transform: rotate(-35deg) translateY(-5px);
+  }
+}
+
+@keyframes celebratingGesture {
+  0%, 100% {
+    transform: rotate(-20deg) translateY(-2px);
+  }
+  25% {
+    transform: rotate(20deg) translateY(-8px);
+  }
+  50% {
+    transform: rotate(-20deg) translateY(-6px);
+  }
+  75% {
+    transform: rotate(15deg) translateY(-7px);
   }
 }
 
