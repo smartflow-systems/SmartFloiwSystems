@@ -30,7 +30,7 @@
   p { line-height: 1.6; }
 }
 
-/* ========== ANIMATED CIRCUIT BACKGROUND ========== */
+/* ========== FLOWING CIRCUIT LINES ANIMATION ========== */
 body {
   position: relative;
   background-attachment: fixed;
@@ -41,14 +41,14 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 200%;
+  height: 200%;
   background-image: 
-    linear-gradient(90deg, rgba(255, 215, 0, 0.15) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255, 215, 0, 0.15) 1px, transparent 1px);
-  background-size: 120px 120px;
-  animation: flowGridLines 150s linear infinite;
-  opacity: 0.8;
+    linear-gradient(90deg, transparent 24%, rgba(255, 215, 0, 0.05) 25%, rgba(255, 215, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 215, 0, 0.05) 75%, rgba(255, 215, 0, 0.05) 76%, transparent 77%, transparent),
+    linear-gradient(0deg, transparent 24%, rgba(255, 215, 0, 0.05) 25%, rgba(255, 215, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 215, 0, 0.05) 75%, rgba(255, 215, 0, 0.05) 76%, transparent 77%, transparent);
+  background-size: 80px 80px;
+  animation: flowHorizontal 20s linear infinite;
+  opacity: 0.6;
   pointer-events: none;
   z-index: -2;
 }
@@ -60,29 +60,56 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle, rgba(255, 215, 0, 0.25) 2px, transparent 2px);
-  background-size: 100px 100px;
-  animation: flowCircuits 180s linear infinite;
-  opacity: 0.7;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(255, 215, 0, 0.07) 0%, transparent 50%);
+  animation: flowGlow 30s ease-in-out infinite;
+  opacity: 0.5;
   pointer-events: none;
   z-index: -2;
 }
 
-@keyframes flowGridLines {
+@keyframes flowHorizontal {
   0% { 
-    transform: translate(0, 0);
+    transform: translateY(0);
   }
   100% { 
-    transform: translate(120px, 120px);
+    transform: translateY(80px);
   }
 }
 
-@keyframes flowCircuits {
+@keyframes flowGlow {
+  0%, 100% { 
+    opacity: 0.4;
+  }
+  50% { 
+    opacity: 0.8;
+  }
+}
+
+/* Extra circuit layer - flowing diagonal */
+#root::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 215, 0, 0.08) 35px, rgba(255, 215, 0, 0.08) 70px);
+  animation: flowDiagonal 40s linear infinite;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: -2;
+}
+
+@keyframes flowDiagonal {
   0% { 
     transform: translate(0, 0);
   }
   100% { 
-    transform: translate(100px, 100px);
+    transform: translate(70px, 70px);
   }
 }
 
