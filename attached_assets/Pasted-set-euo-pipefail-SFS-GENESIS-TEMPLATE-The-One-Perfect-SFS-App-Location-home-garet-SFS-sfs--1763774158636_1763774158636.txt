@@ -1,0 +1,781 @@
+set -euo pipefail
+
+# SFS GENESIS TEMPLATE - The One Perfect SFS App
+# Location: /home/garet/SFS/sfs-genesis-template
+# Purpose: Master template for all future SFS projects
+
+PROJECT_DIR="/home/garet/SFS/sfs-genesis-template"
+
+echo "🚀 Creating SFS Genesis Template..."
+
+# Create project structure
+mkdir -p "$PROJECT_DIR"/{src/{components,pages,lib,styles},public,scripts,.github/workflows}
+
+cd "$PROJECT_DIR"
+
+# ============================================================================
+# PACKAGE.JSON - React 19 + TypeScript 5 + Vite 5
+# ============================================================================
+cat > package.json << 'EOF'
+{
+  "name": "sfs-genesis-template",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port ${PORT:-5000}",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port ${PORT:-5000}",
+    "health": "node scripts/health.js"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.4.49",
+    "autoprefixer": "^10.4.20"
+  }
+}
+EOF
+
+# ============================================================================
+# TYPESCRIPT CONFIG
+# ============================================================================
+cat > tsconfig.json << 'EOF'
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+EOF
+
+cat > tsconfig.node.json << 'EOF'
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true
+  },
+  "include": ["vite.config.ts"]
+}
+EOF
+
+# ============================================================================
+# VITE CONFIG - Optimized for Replit
+# ============================================================================
+cat > vite.config.ts << 'EOF'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    port: parseInt(process.env.PORT || '5000'),
+    strictPort: true,
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: parseInt(process.env.PORT || '5000'),
+    strictPort: true,
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+  },
+})
+EOF
+
+# ============================================================================
+# TAILWIND CONFIG - SFS Brown/Black/Gold Theme
+# ============================================================================
+cat > tailwind.config.js << 'EOF'
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        sfs: {
+          black: '#0D0D0D',
+          brown: '#3B2F2F',
+          gold: '#FFD700',
+          'gold-hover': '#E6C200',
+          beige: '#F5F5DC',
+        },
+      },
+    },
+  },
+  plugins: [],
+}
+EOF
+
+cat > postcss.config.js << 'EOF'
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+EOF
+
+# ============================================================================
+# MAIN CSS - SFS Theme
+# ============================================================================
+cat > src/styles/index.css << 'EOF'
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-sfs-black text-white;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .sfs-gradient {
+    background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 100%);
+  }
+  
+  .sfs-button {
+    @apply bg-sfs-gold hover:bg-sfs-gold-hover text-sfs-black font-semibold px-6 py-3 rounded-lg transition-colors duration-200;
+  }
+  
+  .sfs-card {
+    @apply bg-sfs-brown/30 border border-sfs-brown rounded-lg p-6 backdrop-blur-sm;
+  }
+}
+EOF
+
+# ============================================================================
+# REACT APP - Main Entry Point
+# ============================================================================
+cat > src/main.tsx << 'EOF'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './styles/index.css'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+EOF
+
+# ============================================================================
+# APP COMPONENT - SFS Branded Landing
+# ============================================================================
+cat > src/App.tsx << 'EOF'
+import React from 'react'
+import { Logo } from './components/Logo'
+import { HealthCheck } from './components/HealthCheck'
+
+function App() {
+  return (
+    <div className="min-h-screen sfs-gradient">
+      <div className="container mx-auto px-4 py-16">
+        {/* Header */}
+        <header className="text-center mb-16">
+          <Logo />
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-sfs-gold to-sfs-beige bg-clip-text text-transparent">
+            SFS Genesis Template
+          </h1>
+          <p className="text-xl text-sfs-beige/80">
+            The Perfect Starting Point for SmartFlow Systems Apps
+          </p>
+        </header>
+
+        {/* Features Grid */}
+        <div className="grid md:grid-cols-3 gap-6 mb-16">
+          <div className="sfs-card">
+            <h3 className="text-xl font-semibold text-sfs-gold mb-2">⚡ React 19</h3>
+            <p className="text-sfs-beige/70">Latest React with TypeScript 5</p>
+          </div>
+          <div className="sfs-card">
+            <h3 className="text-xl font-semibold text-sfs-gold mb-2">🎨 SFS Theme</h3>
+            <p className="text-sfs-beige/70">Brown/Black/Gold baked in</p>
+          </div>
+          <div className="sfs-card">
+            <h3 className="text-xl font-semibold text-sfs-gold mb-2">🚀 Replit Ready</h3>
+            <p className="text-sfs-beige/70">One-click deployment</p>
+          </div>
+        </div>
+
+        {/* Health Check */}
+        <HealthCheck />
+
+        {/* CTA */}
+        <div className="text-center mt-16">
+          <button className="sfs-button">
+            Start Building Your SFS App
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default App
+EOF
+
+# ============================================================================
+# COMPONENTS
+# ============================================================================
+cat > src/components/Logo.tsx << 'EOF'
+import React from 'react'
+
+export function Logo() {
+  return (
+    <div className="inline-block mb-8">
+      <div className="w-24 h-24 mx-auto bg-gradient-to-br from-sfs-gold to-sfs-brown rounded-2xl flex items-center justify-center shadow-2xl">
+        <span className="text-4xl font-bold text-sfs-black">SFS</span>
+      </div>
+    </div>
+  )
+}
+EOF
+
+cat > src/components/HealthCheck.tsx << 'EOF'
+import React, { useState, useEffect } from 'react'
+
+export function HealthCheck() {
+  const [health, setHealth] = useState<{ ok: boolean } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/health')
+      .then(res => res.json())
+      .then(data => {
+        setHealth(data)
+        setLoading(false)
+      })
+      .catch(() => {
+        setHealth({ ok: false })
+        setLoading(false)
+      })
+  }, [])
+
+  return (
+    <div className="sfs-card text-center">
+      <h3 className="text-lg font-semibold text-sfs-gold mb-2">System Health</h3>
+      {loading ? (
+        <p className="text-sfs-beige/70">Checking...</p>
+      ) : (
+        <div className="flex items-center justify-center gap-2">
+          <div className={`w-3 h-3 rounded-full ${health?.ok ? 'bg-green-500' : 'bg-red-500'}`} />
+          <span className="text-sfs-beige/90">
+            {health?.ok ? 'All Systems Operational' : 'Service Unavailable'}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+EOF
+
+# ============================================================================
+# HTML ENTRY POINT
+# ============================================================================
+cat > index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SFS Genesis Template</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+EOF
+
+# ============================================================================
+# EXPRESS HEALTH CHECK SERVER
+# ============================================================================
+cat > server.js << 'EOF'
+import express from 'express';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, timestamp: new Date().toISOString() });
+});
+
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(join(__dirname, 'dist')));
+  app.get('*', (req, res) => {
+    res.sendFile(join(__dirname, 'dist', 'index.html'));
+  });
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ SFS Genesis Template running on port ${PORT}`);
+});
+EOF
+
+# ============================================================================
+# HEALTH CHECK SCRIPT
+# ============================================================================
+cat > scripts/health.js << 'EOF'
+const PORT = process.env.PORT || 5000;
+
+fetch(`http://localhost:${PORT}/api/health`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.ok) {
+      console.log('✅ Health check passed');
+      process.exit(0);
+    } else {
+      console.error('❌ Health check failed');
+      process.exit(1);
+    }
+  })
+  .catch(err => {
+    console.error('❌ Health check error:', err.message);
+    process.exit(1);
+  });
+EOF
+
+# ============================================================================
+# GITHUB ACTIONS CI/CD
+# ============================================================================
+cat > .github/workflows/ci.yml << 'EOF'
+name: SFS CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Health Check
+        run: |
+          npm run preview &
+          sleep 5
+          npm run health
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to Replit
+        run: echo "🚀 Deploy to Replit (configure with REPLIT_TOKEN secret)"
+EOF
+
+# ============================================================================
+# GITIGNORE
+# ============================================================================
+cat > .gitignore << 'EOF'
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Build
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Replit
+.replit
+replit.nix
+EOF
+
+# ============================================================================
+# README - Complete Documentation
+# ============================================================================
+cat > README.md << 'EOF'
+# 🚀 SFS Genesis Template
+
+The **perfect starting point** for all SmartFlow Systems applications.
+
+## 🎯 What's Inside
+
+- ⚡ **React 19** + TypeScript 5 + Vite 5
+- 🎨 **SFS Theme** - Brown/Black/Gold baked in
+- 🔧 **Tailwind CSS** with custom SFS utilities
+- ✅ **Health Checks** - `/api/health` endpoint
+- 🚀 **Replit Ready** - One-click deployment
+- 🔄 **GitHub Actions** - CI/CD pipeline
+
+## 🏗️ Tech Stack
+```
+Frontend:  React 19, TypeScript 5, Tailwind CSS
+Build:     Vite 5
+Backend:   Express.js (health checks)
+Deploy:    Replit, GitHub Actions
+```
+
+## 🎨 SFS Color Palette
+```css
+Black:      #0D0D0D
+Brown:      #3B2F2F
+Gold:       #FFD700
+Gold Hover: #E6C200
+Beige:      #F5F5DC
+```
+
+## 🚀 Quick Start
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Check health
+npm run health
+```
+
+## 📁 Project Structure
+```
+sfs-genesis-template/
+├── src/
+│   ├── components/     # React components
+│   ├── pages/          # Page components
+│   ├── lib/            # Utilities & helpers
+│   ├── styles/         # CSS & Tailwind
+│   ├── App.tsx         # Main app component
+│   └── main.tsx        # Entry point
+├── scripts/
+│   └── health.js       # Health check script
+├── .github/
+│   └── workflows/
+│       └── ci.yml      # CI/CD pipeline
+├── server.js           # Express server
+├── vite.config.ts      # Vite configuration
+├── tailwind.config.js  # Tailwind + SFS theme
+└── package.json        # Dependencies
+```
+
+## 🌐 Deployment
+
+### Replit
+1. Import this repo to Replit
+2. Set environment variables:
+   - `PORT` (optional, defaults to 5000)
+3. Click "Run"
+
+### Manual
+```bash
+npm run build
+node server.js
+```
+
+## ✅ Health Check
+
+Health endpoint: `GET /api/health`
+
+Response:
+```json
+{
+  "ok": true,
+  "timestamp": "2025-11-22T12:00:00.000Z"
+}
+```
+
+## 🎨 Using SFS Theme
+```tsx
+// Gradient background
+<div className="sfs-gradient">...</div>
+
+// SFS Button
+<button className="sfs-button">Click Me</button>
+
+// SFS Card
+<div className="sfs-card">Content</div>
+
+// Custom colors
+<div className="bg-sfs-brown text-sfs-gold">...</div>
+```
+
+## 📋 Common Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run health` | Run health check |
+
+## 🔧 Environment Variables
+```bash
+PORT=5000              # Server port (optional)
+NODE_ENV=production    # Environment mode
+```
+
+## 🤝 Contributing
+
+This is the **master template** for all SFS projects. Changes here propagate to all apps.
+
+## 📝 License
+
+Proprietary - SmartFlow Systems
+
+---
+
+**Built with 💛 by SmartFlow Systems**
+EOF
+
+# ============================================================================
+# AGENTS.MD - AI Assistant Guide
+# ============================================================================
+cat > AGENTS.md << 'EOF'
+# 🤖 AI Agent Guide - SFS Genesis Template
+
+## Project Context
+This is the **master template** for all SmartFlow Systems applications. Every SFS project starts from this foundation.
+
+## File Locations
+
+### Core Files
+- `[src/App.tsx]` - Main application component
+- `[src/main.tsx]` - React entry point
+- `[server.js]` - Express health check server
+- `[vite.config.ts]` - Vite build configuration
+- `[tailwind.config.js]` - SFS theme configuration
+
+### Styling
+- `[src/styles/index.css]` - Tailwind + custom SFS styles
+
+### Components
+- `[src/components/Logo.tsx]` - SFS logo component
+- `[src/components/HealthCheck.tsx]` - Health status display
+
+## SFS Standards
+
+### Colors (Tailwind Classes)
+```
+bg-sfs-black        #0D0D0D
+bg-sfs-brown        #3B2F2F
+bg-sfs-gold         #FFD700
+bg-sfs-gold-hover   #E6C200
+bg-sfs-beige        #F5F5DC
+```
+
+### Custom Components
+```
+.sfs-gradient       Linear gradient brown → black
+.sfs-button         Gold button with hover
+.sfs-card           Brown card with backdrop blur
+```
+
+## Operations
+
+### Before Destructive Changes
+```bash
+# VERIFY current state
+cat [path/to/file.ts]
+
+# Make change
+# ...
+
+# UNDO if needed
+git checkout [path/to/file.ts]
+```
+
+### Adding New Features
+1. Create component in `[src/components/FeatureName.tsx]`
+2. Import in `[src/App.tsx]`
+3. Use SFS theme classes
+4. Test with `npm run dev`
+
+### Modifying Theme
+1. Edit `[tailwind.config.js]` for colors
+2. Edit `[src/styles/index.css]` for custom classes
+3. Run `npm run build` to rebuild
+
+## Common Patterns
+
+### New Page Component
+```tsx
+// [src/pages/NewPage.tsx]
+import React from 'react'
+
+export function NewPage() {
+  return (
+    <div className="sfs-gradient min-h-screen">
+      <div className="container mx-auto px-4 py-16">
+        <h1 className="text-4xl font-bold text-sfs-gold">
+          New Page
+        </h1>
+      </div>
+    </div>
+  )
+}
+```
+
+### API Integration
+```tsx
+// Add to [server.js]
+app.get('/api/new-endpoint', (req, res) => {
+  res.json({ data: 'value' });
+});
+```
+
+## Deployment Checklist
+
+- [ ] `npm run build` succeeds
+- [ ] `npm run health` passes
+- [ ] GitHub Actions CI passes
+- [ ] Environment variables set in Replit
+- [ ] `/api/health` returns `{"ok":true}`
+
+## Safety Rules
+
+1. **Always use `set -euo pipefail`** in bash scripts
+2. **VERIFY before DELETE** - Show file content first
+3. **Include UNDO command** for reversible operations
+4. **Mark file operations**: (OVERWRITE), (NEW FILE), (APPEND)
+5. **GitHub = source of truth** - Commit working code
+
+## Tech Stack Reference
+
+- **React**: 19.0.0
+- **TypeScript**: 5.6.3
+- **Vite**: 5.4.11
+- **Tailwind**: 3.4.17
+- **Express**: 4.18.2
+
+## Port Configuration
+
+Default: `5000`
+Override: Set `PORT` environment variable
+```bash
+PORT=3000 npm run dev
+```
+
+## Health Check
+
+Endpoint: `GET /api/health`
+Script: `npm run health`
+Location: `[scripts/health.js]`
+
+Expected: `{"ok":true,"timestamp":"..."}`
+
+---
+
+**Last Updated**: 2025-11-22
+**Maintained By**: boweazy (SmartFlow Systems)
+EOF
+
+# ============================================================================
+# Initialize Git
+# ============================================================================
+git init
+git add .
+git commit -m "🎉 SFS Genesis Template - Initial commit
+
+- React 19 + TypeScript 5 + Vite 5
+- SFS brown/black/gold theme
+- Tailwind CSS with custom utilities
+- Express health check server
+- GitHub Actions CI/CD
+- Replit deployment ready
+- Complete documentation"
+
+echo ""
+echo "✅ SFS Genesis Template created at: $PROJECT_DIR"
+echo ""
+echo "📋 Next Steps:"
+echo "   1. cd $PROJECT_DIR"
+echo "   2. npm install"
+echo "   3. npm run dev"
+echo ""
+echo "🎨 Features:"
+echo "   • React 19 with TypeScript 5"
+echo "   • SFS brown/black/gold theme baked in"
+echo "   • Tailwind CSS custom utilities"
+echo "   • Health check endpoint (/api/health)"
+echo "   • GitHub Actions CI/CD"
+echo "   • Replit deployment ready"
+echo ""
+echo "📂 Key Files:"
+echo "   [src/App.tsx] - Main app"
+echo "   [src/styles/index.css] - SFS theme"
+echo "   [tailwind.config.js] - Color palette"
+echo "   [server.js] - Express server"
+echo "   [AGENTS.md] - AI assistant guide"
+echo ""
+echo "🚀 Ready to clone for new SFS projects!"
