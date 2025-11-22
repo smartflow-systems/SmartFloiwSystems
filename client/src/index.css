@@ -1,39 +1,433 @@
-import React from 'react'
+@import "tailwindcss";
+@import "tw-animate-css";
 
-export function CircuitNodes() {
-  const generateShootingStars = () => {
-    return Array.from({ length: 8 }, (_, i) => {
-      const angle = (i / 8) * 360
-      return {
-        id: i,
-        startX: Math.random() * window.innerWidth,
-        startY: Math.random() * window.innerHeight,
-        endX: Math.random() * window.innerWidth,
-        endY: Math.random() * window.innerHeight,
-        duration: 5 + Math.random() * 3,
-        delay: i * 2.5,
-      }
-    })
+@theme inline {
+  --color-sfs-black: #0D0D0D;
+  --color-sfs-brown: #3B2F2F;
+  --color-sfs-gold: #FFD700;
+  --color-sfs-gold-hover: #E6C200;
+  --color-sfs-beige: #F5F5DC;
+  
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
   }
 
-  const stars = generateShootingStars()
-
-  return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      {stars.map((star) => (
-        <div
-          key={star.id}
-          className="peaceful-star"
-          style={{
-            left: `${star.startX}px`,
-            top: `${star.startY}px`,
-            '--end-x': `${star.endX - star.startX}px`,
-            '--end-y': `${star.endY - star.startY}px`,
-            '--duration': `${star.duration}s`,
-            '--delay': `${star.delay}s`,
-          } as React.CSSProperties & { [key: string]: string }}
-        />
-      ))}
-    </div>
-  )
+  body {
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+  
+  h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; }
+  h2 { font-size: 2.5rem; font-weight: 800; }
+  h3 { font-size: 1.5rem; font-weight: 700; }
+  p { line-height: 1.6; }
 }
+
+/* ========== DEEP SPACE BACKGROUND ========== */
+body {
+  background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 50%, #1a0f0a 100%);
+  background-attachment: fixed;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at 15% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 60%, rgba(255, 215, 0, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== PEACEFUL ELECTRIC SHOOTING STARS CIRCUIT ========== */
+.electric-star {
+  position: fixed;
+  width: 2px;
+  height: 2px;
+  background: #FFD700;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.9), 0 0 16px rgba(255, 215, 0, 0.6);
+  animation: peacefulFloat var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  animation-delay: var(--delay);
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5));
+}
+
+.electric-star::before {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0.3) 40%, transparent 100%);
+  right: 100%;
+  top: -1px;
+  filter: blur(1.5px);
+}
+
+@keyframes peacefulFloat {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.2));
+  }
+  8% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+  }
+  50% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    transform: translate(var(--end-x), var(--end-y));
+  }
+  92% {
+    opacity: 0.2;
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.3));
+    transform: translate(var(--end-x), var(--end-y));
+  }
+  100% {
+    opacity: 0;
+    filter: drop-shadow(0 0 0 transparent);
+    transform: translate(var(--end-x), var(--end-y));
+  }
+}
+
+/* Glass Cards */
+.glass-card {
+  background: rgba(59, 47, 47, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 12px;
+}
+
+.glass-card-hover {
+  background: rgba(59, 47, 47, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.glass-card-hover:hover {
+  background: rgba(59, 47, 47, 0.25);
+  border-color: rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255, 215, 0, 0.1);
+}
+
+/* Text Glow */
+.text-glow {
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* SFS Button Styles */
+.sfs-button {
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+  color: #0D0D0D;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.sfs-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.sfs-button:active {
+  transform: translateY(0);
+}
+
+.sfs-button-outline {
+  background: transparent;
+  color: #FFD700;
+  border: 2px solid #FFD700;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sfs-button-outline:hover {
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Layout */
+section {
+  padding: 5rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+/* Header */
+header {
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+  position: relative;
+  z-index: 30;
+  background: rgba(59, 47, 47, 0.15);
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid rgba(255, 215, 0, 0.15);
+  background: rgba(59, 47, 47, 0.1);
+  position: relative;
+  z-index: 5;
+  backdrop-filter: blur(15px);
+}
+
+main {
+  position: relative;
+  z-index: 2;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 10;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Text Colors */
+.text-sfs-gold { color: #FFD700; }
+.text-sfs-brown { color: #3B2F2F; }
+.text-sfs-black { color: #0D0D0D; }
+.text-sfs-beige { color: #F5F5DC; }
+
+.bg-sfs-black { background-color: #0D0D0D; }
+.bg-sfs-brown { background-color: #3B2F2F; }
+.bg-sfs-gold { background-color: #FFD700; }
+
+.border-sfs-gold { border-color: #FFD700; }
+.border-sfs-brown { border-color: #3B2F2F; }
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 280px;
+  background: rgba(13, 13, 13, 0.98);
+  backdrop-filter: blur(10px);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 100;
+  border-right: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 2rem 0;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar a {
+  display: block;
+  padding: 1rem 2rem;
+  color: #F5F5DC;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar a:hover {
+  color: #FFD700;
+  background: rgba(255, 215, 0, 0.05);
+  border-left-color: #FFD700;
+}
+
+/* Hamburger */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: #FFD700;
+  transition: all 0.3s ease;
+  border-radius: 1px;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translateY(12px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-12px);
+}
+
+/* Logo/Brand */
+.logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #FFD700;
+}
+
+/* Testimonials */
+.testimonial-card {
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.testimonial-card p {
+  font-style: italic;
+  color: #F5F5DC;
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  color: #FFD700;
+  font-weight: 700;
+}
+
+/* Pricing Cards */
+.pricing-card {
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.pricing-card.featured {
+  border: 2px solid #FFD700;
+  transform: scale(1.05);
+}
+
+.pricing-card h3 {
+  color: #FFD700;
+  margin-bottom: 1rem;
+}
+
+.pricing-card .price {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #FFD700;
+  margin: 1rem 0;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.pricing-card li {
+  padding: 0.75rem 0;
+  color: #F5F5DC;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.pricing-card li::before {
+  content: '✓ ';
+  color: #FFD700;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  
+  .feature-grid,
+  .pricing-grid,
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pricing-card.featured {
+    transform: scale(1);
+  }
+  
+  section {
+    padding: 3rem 0;
+  }
+}
+
+/* Utilities */
+.flex { display: flex; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mt-8 { margin-top: 2rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-12 { margin-bottom: 3rem; }
+.mb-16 { margin-bottom: 4rem; }
+.py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+.py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.max-w-4xl { max-width: 56rem; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-md { max-width: 28rem; }
+.hidden { display: none; }
+.sticky { position: sticky; }
+.top-0 { top: 0; }
+.z-20 { z-index: 20; }
+.z-0 { z-index: 0; }
+.border-b { border-bottom: 1px solid currentColor; }
+.border-t { border-top: 1px solid currentColor; }
+.leading-relaxed { line-height: 1.625; }
+.opacity-90 { opacity: 0.9; }
+.opacity-80 { opacity: 0.8; }
+.opacity-70 { opacity: 0.7; }
+.opacity-50 { opacity: 0.5; }
