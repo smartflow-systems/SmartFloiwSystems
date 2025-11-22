@@ -8,18 +8,19 @@ export function RobotWorkers() {
     action: 'pointing' | 'reading' | 'celebrating'
     vx: number
     vy: number
+    rotation: number
   }>>([])
 
   useEffect(() => {
-    // Initialize robots with random positions
     setRobots(
       Array.from({ length: 5 }, (_, i) => ({
         id: i,
-        x: Math.random() * (window.innerWidth - 50),
-        y: Math.random() * (window.innerHeight - 50),
+        x: Math.random() * (window.innerWidth - 80),
+        y: Math.random() * (window.innerHeight - 100) + 100,
         action: ['pointing', 'reading', 'celebrating'][Math.floor(Math.random() * 3)] as 'pointing' | 'reading' | 'celebrating',
         vx: (Math.random() - 0.5) * 2,
         vy: (Math.random() - 0.5) * 2,
+        rotation: Math.random() * 360,
       }))
     )
   }, [])
@@ -33,23 +34,29 @@ export function RobotWorkers() {
           let vx = robot.vx
           let vy = robot.vy
 
-          // Bounce off walls
-          if (newX < 0 || newX > window.innerWidth - 50) {
+          if (newX < 0 || newX > window.innerWidth - 80) {
             vx = -vx
-            newX = Math.max(0, Math.min(newX, window.innerWidth - 50))
+            newX = Math.max(0, Math.min(newX, window.innerWidth - 80))
           }
-          if (newY < 100 || newY > window.innerHeight - 50) {
+          if (newY < 120 || newY > window.innerHeight - 100) {
             vy = -vy
-            newY = Math.max(100, Math.min(newY, window.innerHeight - 50))
+            newY = Math.max(120, Math.min(newY, window.innerHeight - 100))
           }
 
-          // Random action changes
           const action =
             Math.random() > 0.95
               ? (['pointing', 'reading', 'celebrating'][Math.floor(Math.random() * 3)] as 'pointing' | 'reading' | 'celebrating')
               : robot.action
 
-          return { ...robot, x: newX, y: newY, vx, vy, action }
+          return {
+            ...robot,
+            x: newX,
+            y: newY,
+            vx,
+            vy,
+            action,
+            rotation: robot.rotation + (vx * 2),
+          }
         })
       )
     }, 100)
@@ -58,58 +65,81 @@ export function RobotWorkers() {
   }, [])
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-5">
+    <div className="pointer-events-none fixed inset-0 z-5" style={{ perspective: '1200px' }}>
       {robots.map((robot) => (
         <div
           key={robot.id}
-          className={`robot-worker robot-${robot.action}`}
+          className="robot-character"
           style={{
             left: `${robot.x}px`,
             top: `${robot.y}px`,
+            transform: `perspective(1200px) rotateY(${robot.rotation * 0.5}deg) rotateZ(${robot.action === 'celebrating' ? Math.sin(Date.now() / 200) * 10 : 0}deg)`,
           }}
         >
-          {/* Head */}
-          <div className="robot-head">
-            <div className="robot-eyes">
-              <div className="robot-eye left" />
-              <div className="robot-eye right" />
+          {/* Main body container */}
+          <div className={`robot-body 3d robot-${robot.action}`}>
+            {/* Head with visor */}
+            <div className="robot-head-3d">
+              <div className="head-main">
+                <div className="head-visor-outer">
+                  <div className="head-visor-inner">
+                    <div className="eye eye-left" />
+                    <div className="eye eye-right" />
+                  </div>
+                </div>
+              </div>
+              <div className="head-chin" />
             </div>
-            {robot.action === 'celebrating' && <div className="robot-mouth excited" />}
-            {robot.action === 'pointing' && <div className="robot-mouth neutral" />}
-            {robot.action === 'reading' && <div className="robot-mouth focused" />}
-          </div>
 
-          {/* Torso */}
-          <div className="robot-torso">
-            <div className="robot-panel" />
-          </div>
+            {/* Neck connector */}
+            <div className="neck-connector" />
 
-          {/* Arms */}
-          <div className="robot-arms">
-            {robot.action === 'pointing' && (
-              <>
-                <div className="robot-arm left pointing-arm" />
-                <div className="robot-arm right" />
-              </>
-            )}
-            {robot.action === 'reading' && (
-              <>
-                <div className="robot-arm left" />
-                <div className="robot-arm right" />
-              </>
-            )}
-            {robot.action === 'celebrating' && (
-              <>
-                <div className="robot-arm left celebrating-arm" />
-                <div className="robot-arm right celebrating-arm" />
-              </>
-            )}
-          </div>
+            {/* Torso */}
+            <div className="torso-main">
+              <div className="torso-front">
+                <div className="panel-light" />
+                <div className="panel-dark" />
+                <div className="panel-light" />
+              </div>
+              <div className="torso-left-side" />
+              <div className="torso-right-side" />
+            </div>
 
-          {/* Legs */}
-          <div className="robot-legs">
-            <div className="robot-leg left" />
-            <div className="robot-leg right" />
+            {/* Shoulders and arms */}
+            <div className="shoulders">
+              <div className="shoulder-left">
+                <div className={`arm-upper left ${robot.action === 'celebrating' ? 'raised' : robot.action === 'pointing' ? 'extended' : 'neutral'}`}>
+                  <div className={`arm-lower left ${robot.action === 'celebrating' ? 'raised' : robot.action === 'pointing' ? 'extended' : 'neutral'}`}>
+                    <div className="hand left" />
+                  </div>
+                </div>
+              </div>
+              <div className="shoulder-right">
+                <div className={`arm-upper right ${robot.action === 'celebrating' ? 'raised' : 'neutral'}`}>
+                  <div className={`arm-lower right ${robot.action === 'celebrating' ? 'raised' : 'neutral'}`}>
+                    <div className="hand right" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Hips */}
+            <div className="hips">
+              <div className="hip-left">
+                <div className="leg-upper left">
+                  <div className="leg-lower left">
+                    <div className="foot left" />
+                  </div>
+                </div>
+              </div>
+              <div className="hip-right">
+                <div className="leg-upper right">
+                  <div className="leg-lower right">
+                    <div className="foot right" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ))}

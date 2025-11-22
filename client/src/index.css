@@ -65,28 +65,26 @@ body::before {
   pointer-events: none;
 }
 
-/* ========== SILLY ROBOT WORKERS ========== */
-.robot-worker {
-  width: 35px;
-  height: 45px;
-  opacity: 0.9;
+/* ========== 3D ROBOT CHARACTERS ========== */
+.robot-character {
+  position: fixed;
+  width: 60px;
+  height: 90px;
+  opacity: 0.95;
   pointer-events: none;
   z-index: 5;
+  transform-style: preserve-3d;
 }
 
-.robot-worker.robot-pointing {
-  animation: pointingAnimation var(--duration) ease-in-out infinite;
-  animation-delay: var(--delay);
-}
-
-.robot-worker.robot-reading {
-  animation: readingAnimation var(--duration) ease-in-out infinite;
-  animation-delay: var(--delay);
-}
-
-.robot-worker.robot-celebrating {
-  animation: celebratingAnimation var(--duration) ease-in-out infinite;
-  animation-delay: var(--delay);
+.robot-body.3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 
 .robot-body {
@@ -99,41 +97,99 @@ body::before {
   gap: 2px;
 }
 
-.robot-head {
-  width: 18px;
-  height: 18px;
-  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
-  border-radius: 3px;
-  border: 2px solid #3B2F2F;
+/* 3D Head */
+.robot-head-3d {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 3px;
   position: relative;
+  transform-style: preserve-3d;
+}
+
+.head-main {
+  width: 100%;
+  height: 24px;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 50%, #FFD700 100%);
+  border-radius: 4px;
+  border: 2px solid #3B2F2F;
+  box-shadow: 
+    -3px -3px 8px rgba(255, 255, 255, 0.2),
+    3px 3px 8px rgba(0, 0, 0, 0.4),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.3),
+    0 0 10px rgba(255, 215, 0, 0.5);
+  position: relative;
+}
+
+.head-visor-outer {
+  position: absolute;
+  width: 20px;
+  height: 12px;
+  top: 6px;
+  left: 4px;
+  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+  border-radius: 2px;
+  padding: 2px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+.head-visor-inner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(100, 150, 255, 0.3) 0%, rgba(100, 200, 255, 0.2) 100%);
+  border-radius: 1px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   gap: 2px;
-  box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
-  animation: headBob 0.6s ease-in-out infinite;
+  padding: 1px 2px;
 }
 
-.robot-eyes {
-  display: flex;
-  gap: 4px;
-}
-
-.robot-eye {
+.eye {
   width: 4px;
-  height: 4px;
-  background: #0D0D0D;
+  height: 6px;
+  background: linear-gradient(135deg, #00ffff 0%, #0088ff 100%);
   border-radius: 50%;
-  animation: eyeBlink 2s ease-in-out infinite;
+  box-shadow: 0 0 4px rgba(0, 200, 255, 0.8);
+  animation: eyeGlow 1.5s ease-in-out infinite;
 }
 
-.robot-eye.left {
+.eye-left {
   animation-delay: 0s;
 }
 
-.robot-eye.right {
-  animation-delay: 0.1s;
+.eye-right {
+  animation-delay: 0.2s;
+}
+
+@keyframes eyeGlow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(0, 200, 255, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 8px rgba(0, 200, 255, 1);
+  }
+}
+
+.head-chin {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 4px;
+  background: linear-gradient(135deg, #E6C200 0%, #FFD700 100%);
+  border-radius: 0 0 2px 2px;
+  border: 1px solid #3B2F2F;
+}
+
+/* Neck connector */
+.neck-connector {
+  width: 10px;
+  height: 6px;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 2px 2px 0 0;
+  border: 1px solid #3B2F2F;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .robot-mouth {
@@ -155,92 +211,226 @@ body::before {
   animation: excitedSmile 0.8s ease-in-out infinite;
 }
 
-.robot-torso {
-  width: 16px;
-  height: 14px;
-  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
-  border-radius: 2px;
-  border: 2px solid #3B2F2F;
+/* Torso */
+.torso-main {
+  width: 24px;
+  height: 28px;
   position: relative;
-  box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+  transform-style: preserve-3d;
 }
 
-.robot-panel {
+.torso-front {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 50%, #FFD700 100%);
+  border-radius: 3px;
+  border: 2px solid #3B2F2F;
+  box-shadow: 
+    -2px -2px 6px rgba(255, 255, 255, 0.2),
+    2px 2px 6px rgba(0, 0, 0, 0.4),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.2),
+    0 0 8px rgba(255, 215, 0, 0.4);
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 3px;
+}
+
+.panel-light {
+  width: 10px;
+  height: 3px;
+  background: linear-gradient(90deg, #FFE933 0%, #FFF 50%, #FFE933 100%);
+  border-radius: 1px;
+  box-shadow: 0 0 3px rgba(255, 233, 51, 0.6);
+}
+
+.panel-dark {
   width: 8px;
-  height: 8px;
-  background: rgba(59, 47, 47, 0.6);
-  border: 1px solid #3B2F2F;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  height: 4px;
+  background: linear-gradient(90deg, #3B2F2F 0%, #1a1410 50%, #3B2F2F 100%);
+  border: 1px solid #0D0D0D;
   border-radius: 1px;
 }
 
-.robot-arms {
+.torso-left-side {
   position: absolute;
-  width: 28px;
-  top: 20px;
+  left: -2px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(90deg, #E6C200 0%, #FFD700 100%);
+  border-radius: 2px 0 0 2px;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.torso-right-side {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 0 2px 2px 0;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Shoulders and arms */
+.shoulders {
+  position: absolute;
+  width: 36px;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: space-between;
 }
 
-.robot-arm {
+.shoulder-left, .shoulder-right {
+  position: relative;
+}
+
+.arm-upper {
+  width: 5px;
+  height: 12px;
+  background: linear-gradient(90deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 3px;
+  border: 1px solid #3B2F2F;
+  transform-origin: top center;
+  box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arm-upper.left {
+  margin-right: 18px;
+}
+
+.arm-upper.right {
+  margin-left: 18px;
+}
+
+.arm-upper.left.extended {
+  animation: armExtend 1.2s ease-in-out infinite;
+}
+
+.arm-upper.left.raised {
+  animation: armRaise 0.8s ease-in-out infinite;
+}
+
+.arm-upper.right.raised {
+  animation: armRaise 0.8s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.arm-lower {
   width: 4px;
-  height: 8px;
+  height: 10px;
+  background: linear-gradient(90deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 2px;
+  border: 1px solid #3B2F2F;
+  transform-origin: top center;
+  box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.hand {
+  width: 6px;
+  height: 4px;
   background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
   border-radius: 2px;
   border: 1px solid #3B2F2F;
-  animation: armWave 0.8s ease-in-out infinite;
-  transform-origin: top center;
+  margin-top: 2px;
+  box-shadow: 0 0 3px rgba(255, 215, 0, 0.4);
 }
 
-.robot-arm.left {
-  animation-delay: 0s;
+@keyframes armExtend {
+  0%, 100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(-50deg);
+  }
 }
 
-.robot-arm.right {
-  animation-delay: 0.2s;
+@keyframes armRaise {
+  0%, 100% {
+    transform: rotate(-60deg);
+  }
+  50% {
+    transform: rotate(30deg);
+  }
 }
 
-.robot-arm.pointing-arm {
-  animation: pointingGesture 1.2s ease-in-out infinite !important;
-  animation-delay: 0s !important;
-  height: 10px;
-}
-
-.robot-arm.celebrating-arm {
-  animation: celebratingGesture 0.6s ease-in-out infinite !important;
-  height: 10px;
-}
-
-.robot-legs {
+/* Hips and legs */
+.hips {
   position: absolute;
-  width: 14px;
+  width: 22px;
+  height: 28px;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 2px;
+  gap: 4px;
 }
 
-.robot-leg {
+.hip-left, .hip-right {
   flex: 1;
-  height: 8px;
-  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
-  border-radius: 1px;
-  border: 1px solid #3B2F2F;
-  animation: legBounce 0.6s ease-in-out infinite;
+  position: relative;
 }
 
-.robot-leg.left {
+.leg-upper {
+  width: 5px;
+  height: 12px;
+  background: linear-gradient(90deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 2px;
+  border: 1px solid #3B2F2F;
+  margin: 0 auto;
+  transform-origin: top center;
+  box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.3);
+  animation: legStep 1s ease-in-out infinite;
+}
+
+.leg-upper.left {
   animation-delay: 0s;
 }
 
-.robot-leg.right {
-  animation-delay: 0.1s;
+.leg-upper.right {
+  animation-delay: 0.3s;
+}
+
+.leg-lower {
+  width: 4px;
+  height: 10px;
+  background: linear-gradient(90deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 2px;
+  border: 1px solid #3B2F2F;
+  margin: 2px auto 0;
+  box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.foot {
+  width: 7px;
+  height: 3px;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 1px;
+  border: 1px solid #3B2F2F;
+  margin: 1px auto 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes legStep {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
 }
 
 @keyframes pointingAnimation {
