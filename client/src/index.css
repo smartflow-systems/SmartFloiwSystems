@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --color-sfs-black: #0D0D0D;
   --color-sfs-brown: #3B2F2F;
@@ -10,49 +8,53 @@
   --color-sfs-gold-hover: #E6C200;
   --color-sfs-beige: #F5F5DC;
   
-  --color-background: var(--color-sfs-black);
-  --color-foreground: white;
-  
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 @layer base {
   body {
-    @apply bg-sfs-black text-white overflow-x-hidden;
+    @apply bg-sfs-black text-white;
     font-family: var(--font-sans);
+    overflow-x: hidden;
   }
+  
+  h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; }
+  h2 { font-size: 2.5rem; font-weight: 800; }
+  h3 { font-size: 1.5rem; font-weight: 700; }
+  p { line-height: 1.6; }
 }
 
-/* Glassmorphism and custom utilities - using plain CSS */
+/* Premium Glassmorphism */
 .glass-card {
-  background: linear-gradient(135deg, rgba(59, 47, 47, 0.1) 0%, rgba(13, 13, 13, 0.2) 100%);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(59, 47, 47, 0.4);
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background: rgba(59, 47, 47, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .glass-card-hover {
-  background: linear-gradient(135deg, rgba(59, 47, 47, 0.1) 0%, rgba(13, 13, 13, 0.2) 100%);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(59, 47, 47, 0.4);
-  border-radius: 0.5rem;
-  transition: all 0.3s ease;
+  background: rgba(59, 47, 47, 0.12);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 1rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .glass-card-hover:hover {
-  background: linear-gradient(135deg, rgba(59, 47, 47, 0.3) 0%, rgba(13, 13, 13, 0.3) 100%);
-  border-color: rgba(255, 215, 0, 0.5);
-  box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+  background: rgba(59, 47, 47, 0.2);
+  border-color: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 30px 80px rgba(255, 215, 0, 0.15);
+  transform: translateY(-4px);
 }
 
-/* SFS Gradient Background */
+/* Hero Gradient */
 .sfs-gradient {
-  background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 50%, #1a1410 100%);
+  background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 40%, #1a1410 100%);
 }
 
-/* Circuit Background */
+/* 3D Circuit Background */
 .circuit-bg {
   position: relative;
   overflow: hidden;
@@ -60,65 +62,70 @@
 
 .circuit-bg::before {
   content: '';
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background-image: 
-    linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: flow 20s linear infinite;
-  opacity: 0.3;
+    linear-gradient(90deg, rgba(255, 215, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(255, 215, 0, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: flow 40s linear infinite;
+  opacity: 0.4;
   pointer-events: none;
+  z-index: 0;
 }
 
 .circuit-bg::after {
   content: '';
-  position: absolute;
+  position: fixed;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
-  animation: flow 30s linear infinite reverse;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: flow 50s linear infinite reverse;
   pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes flow {
   0% { transform: translateY(0) translateX(0); }
-  100% { transform: translateY(-50%) translateX(-50%); }
+  100% { transform: translateY(-100%) translateX(-100%); }
 }
 
-/* SFS Button */
+/* Premium Buttons */
 .sfs-button {
   background-color: #FFD700;
   color: #0D0D0D;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
   cursor: pointer;
   border: none;
+  font-size: 1rem;
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
 }
 
 .sfs-button:hover {
   background-color: #E6C200;
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 15px 35px rgba(255, 215, 0, 0.35);
+  transform: translateY(-2px);
 }
 
 .sfs-button-outline {
   border: 2px solid #FFD700;
   color: #FFD700;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  font-weight: 700;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
   background-color: transparent;
   cursor: pointer;
+  font-size: 1rem;
 }
 
 .sfs-button-outline:hover {
@@ -126,16 +133,16 @@
   color: #0D0D0D;
 }
 
-/* Sidebar Styles */
+/* Sidebar */
 .sidebar {
   position: fixed;
   left: 0;
   top: 0;
   height: 100%;
   width: 16rem;
-  background: linear-gradient(135deg, rgba(59, 47, 47, 0.1) 0%, rgba(13, 13, 13, 0.2) 100%);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(59, 47, 47, 0.4);
+  background: rgba(59, 47, 47, 0.1);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 215, 0, 0.1);
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
   z-index: 40;
@@ -145,11 +152,7 @@
   transform: translateX(-100%);
 }
 
-.sidebar-open {
-  transform: translateX(0);
-}
-
-/* Hamburger Menu */
+/* Hamburger */
 .hamburger {
   display: flex;
   flex-direction: column;
@@ -157,18 +160,18 @@
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s;
 }
 
 .hamburger:hover {
-  background-color: rgba(59, 47, 47, 0.3);
+  background-color: rgba(59, 47, 47, 0.4);
 }
 
 .hamburger-line {
   width: 1.5rem;
   height: 0.125rem;
   background-color: #FFD700;
-  transition: all 0.3s ease;
+  transition: all 0.3s;
 }
 
 .hamburger-open .hamburger-line:nth-child(1) {
@@ -183,7 +186,7 @@
   transform: rotate(-45deg) translateY(-0.5rem);
 }
 
-/* GitHub-style Nav Items */
+/* Nav Items */
 .nav-item {
   display: flex;
   align-items: center;
@@ -191,7 +194,7 @@
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   color: rgba(245, 245, 220, 0.8);
-  transition: all 0.2s ease;
+  transition: all 0.2s;
   cursor: pointer;
   text-decoration: none;
 }
@@ -207,7 +210,50 @@
   border-left: 4px solid #FFD700;
 }
 
-/* Text Glow */
+/* Text Effects */
 .text-glow {
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+/* Layout */
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+section {
+  padding: 5rem 0;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+/* Header */
+header {
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
+  background: rgba(59, 47, 47, 0.05);
 }
