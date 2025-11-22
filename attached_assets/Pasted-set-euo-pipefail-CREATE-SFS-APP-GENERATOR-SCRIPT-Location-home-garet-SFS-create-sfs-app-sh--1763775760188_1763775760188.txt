@@ -1,3 +1,12 @@
+set -euo pipefail
+
+# CREATE-SFS-APP GENERATOR SCRIPT
+# Location: /home/garet/SFS/create-sfs-app.sh
+# Purpose: Clone sfs-genesis-template for new projects
+
+SCRIPT_PATH="/home/garet/SFS/create-sfs-app.sh"
+
+cat > "$SCRIPT_PATH" << 'SCRIPT_EOF'
 #!/bin/bash
 set -euo pipefail
 
@@ -298,3 +307,23 @@ echo "   git remote add origin https://github.com/smartflow-systems/$PROJECT_NAM
 echo "   git push -u origin main"
 echo ""
 echo -e "${GREEN}Happy building! 🚀${NC}"
+SCRIPT_EOF
+
+chmod +x "$SCRIPT_PATH"
+
+echo "✅ Generator script created: $SCRIPT_PATH"
+echo ""
+echo "📋 Usage Examples:"
+echo ""
+echo "  # Create a new analytics tool"
+echo "  ./create-sfs-app.sh sfs-analytics-pro 'Advanced analytics dashboard'"
+echo ""
+echo "  # Create a booking system"
+echo "  ./create-sfs-app.sh salon-booking-v2 'Modern salon booking platform'"
+echo ""
+echo "  # Create a marketing tool"
+echo "  ./create-sfs-app.sh content-scheduler 'AI-powered content scheduling'"
+echo ""
+echo "🎯 Try it now:"
+echo "  cd /home/garet/SFS"
+echo "  ./create-sfs-app.sh my-new-app 'My awesome SFS application'"
