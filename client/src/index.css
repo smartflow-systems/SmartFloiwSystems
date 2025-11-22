@@ -21,7 +21,7 @@
   body {
     font-family: var(--font-sans);
     overflow-x: hidden;
-    background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 40%, #1a1410 100%) !important;
+    background-attachment: fixed;
   }
   
   h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; }
@@ -30,30 +30,40 @@
   p { line-height: 1.6; }
 }
 
-/* ========== FLOWING CIRCUIT LINES ANIMATION ========== */
+/* ========== ANIMATED CIRCUIT BACKGROUND ========== */
 body {
-  position: relative;
+  background: 
+    linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 50%, #1a0f0a 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 60px,
+      rgba(255, 215, 0, 0.15) 60px,
+      rgba(255, 215, 0, 0.15) 62px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 60px,
+      rgba(255, 215, 0, 0.15) 60px,
+      rgba(255, 215, 0, 0.15) 62px
+    );
   background-attachment: fixed;
+  animation: flowingCircuit 12s linear infinite;
+  position: relative;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  background-image: 
-    linear-gradient(90deg, transparent 24%, rgba(255, 215, 0, 0.05) 25%, rgba(255, 215, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 215, 0, 0.05) 75%, rgba(255, 215, 0, 0.05) 76%, transparent 77%, transparent),
-    linear-gradient(0deg, transparent 24%, rgba(255, 215, 0, 0.05) 25%, rgba(255, 215, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 215, 0, 0.05) 75%, rgba(255, 215, 0, 0.05) 76%, transparent 77%, transparent);
-  background-size: 80px 80px;
-  animation: flowHorizontal 20s linear infinite;
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: -2;
+@keyframes flowingCircuit {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 0 0, 60px 0, 0 60px;
+  }
 }
 
-body::after {
+/* Pulsing glow overlay */
+html::before {
   content: '';
   position: fixed;
   top: 0;
@@ -61,70 +71,27 @@ body::after {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(255, 215, 0, 0.07) 0%, transparent 50%);
-  animation: flowGlow 30s ease-in-out infinite;
-  opacity: 0.5;
+    radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);
+  animation: glowPulse 8s ease-in-out infinite;
   pointer-events: none;
-  z-index: -2;
+  z-index: -1;
 }
 
-@keyframes flowHorizontal {
-  0% { 
-    transform: translateY(0);
-  }
-  100% { 
-    transform: translateY(80px);
-  }
-}
-
-@keyframes flowGlow {
-  0%, 100% { 
-    opacity: 0.4;
-  }
-  50% { 
-    opacity: 0.8;
-  }
-}
-
-/* Extra circuit layer - flowing diagonal */
-#root::before {
-  content: '';
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background-image: 
-    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 215, 0, 0.08) 35px, rgba(255, 215, 0, 0.08) 70px);
-  animation: flowDiagonal 40s linear infinite;
-  opacity: 0.4;
-  pointer-events: none;
-  z-index: -2;
-}
-
-@keyframes flowDiagonal {
-  0% { 
-    transform: translate(0, 0);
-  }
-  100% { 
-    transform: translate(70px, 70px);
-  }
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
 }
 
 #root {
   position: relative;
   min-height: 100vh;
-  background: transparent;
   z-index: 1;
 }
 
-/* Content stays above circuit */
 .content-wrapper {
   position: relative;
   z-index: 2;
-  background: transparent;
 }
 
 /* Glass Cards */
