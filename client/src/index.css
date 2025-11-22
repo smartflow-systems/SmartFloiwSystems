@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
   --color-sfs-black: #0D0D0D;
   --color-sfs-brown: #3B2F2F;
@@ -8,30 +10,134 @@
   --color-sfs-gold-hover: #E6C200;
   --color-sfs-beige: #F5F5DC;
   
-  /* Keep existing variables for compatibility if needed, or override */
   --color-background: var(--color-sfs-black);
   --color-foreground: white;
   
-  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
 }
 
 @layer base {
   body {
-    @apply bg-sfs-black text-white;
+    @apply bg-sfs-black text-white overflow-x-hidden;
     font-family: var(--font-sans);
   }
 }
 
 @layer components {
+  /* Glassmorphism Cards */
+  .glass-card {
+    @apply bg-sfs-brown/20 backdrop-blur-md border border-sfs-brown/40 rounded-lg shadow-xl;
+    background: linear-gradient(135deg, rgba(59, 47, 47, 0.1) 0%, rgba(13, 13, 13, 0.2) 100%);
+  }
+  
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 hover:bg-sfs-brown/30 hover:border-sfs-gold/50 hover:shadow-2xl;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+  }
+  
+  .glass-card-hover:hover {
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+  }
+
+  /* SFS Gradient Background */
   .sfs-gradient {
-    background: linear-gradient(135deg, var(--color-sfs-brown) 0%, var(--color-sfs-black) 100%);
+    background: linear-gradient(135deg, #3B2F2F 0%, #0D0D0D 50%, #1a1410 100%);
   }
   
+  /* Circuit Background */
+  .circuit-bg {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .circuit-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px),
+      linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: flow 20s linear infinite;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  
+  .circuit-bg::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    animation: flow 30s linear infinite reverse;
+    pointer-events: none;
+  }
+
+  /* SFS Button */
   .sfs-button {
-    @apply bg-sfs-gold hover:bg-sfs-gold-hover text-sfs-black font-semibold px-6 py-3 rounded-lg transition-colors duration-200 cursor-pointer;
+    @apply bg-sfs-gold hover:bg-sfs-gold-hover text-sfs-black font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg;
   }
   
-  .sfs-card {
-    @apply bg-sfs-brown/30 border border-sfs-brown rounded-lg p-6 backdrop-blur-sm;
+  .sfs-button:hover {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  }
+  
+  .sfs-button-outline {
+    @apply border-2 border-sfs-gold text-sfs-gold hover:bg-sfs-gold hover:text-sfs-black font-semibold px-6 py-3 rounded-lg transition-all duration-200;
+  }
+
+  /* Sidebar Styles */
+  .sidebar {
+    @apply fixed left-0 top-0 h-full w-64 glass-card transform transition-transform duration-300 ease-in-out z-40;
+  }
+  
+  .sidebar-closed {
+    @apply -translate-x-full;
+  }
+  
+  .sidebar-open {
+    @apply translate-x-0;
+  }
+
+  /* Hamburger Menu */
+  .hamburger {
+    @apply flex flex-col gap-1.5 cursor-pointer p-2 rounded-lg hover:bg-sfs-brown/30 transition-colors;
+  }
+  
+  .hamburger-line {
+    @apply w-6 h-0.5 bg-sfs-gold transition-all duration-300;
+  }
+  
+  .hamburger-open .hamburger-line:nth-child(1) {
+    @apply rotate-45 translate-y-2;
+  }
+  
+  .hamburger-open .hamburger-line:nth-child(2) {
+    @apply opacity-0;
+  }
+  
+  .hamburger-open .hamburger-line:nth-child(3) {
+    @apply -rotate-45 -translate-y-2;
+  }
+
+  /* GitHub-style Nav Items */
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sfs-beige/80 hover:bg-sfs-brown/40 hover:text-sfs-gold transition-all duration-200 cursor-pointer no-underline;
+  }
+  
+  .nav-item-active {
+    @apply bg-sfs-brown/50 text-sfs-gold border-l-4 border-sfs-gold;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
   }
 }
