@@ -65,6 +65,235 @@ body::before {
   pointer-events: none;
 }
 
+/* ========== SILLY ROBOT WORKERS ========== */
+.robot-worker {
+  position: fixed;
+  width: 35px;
+  height: 45px;
+  left: var(--start-x);
+  top: var(--start-y);
+  animation: robotDash var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.robot-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.robot-head {
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 3px;
+  border: 2px solid #3B2F2F;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+  animation: headBob 0.6s ease-in-out infinite;
+}
+
+.robot-eyes {
+  display: flex;
+  gap: 4px;
+}
+
+.robot-eye {
+  width: 4px;
+  height: 4px;
+  background: #0D0D0D;
+  border-radius: 50%;
+  animation: eyeBlink 2s ease-in-out infinite;
+}
+
+.robot-eye.left {
+  animation-delay: 0s;
+}
+
+.robot-eye.right {
+  animation-delay: 0.1s;
+}
+
+.robot-mouth {
+  width: 6px;
+  height: 2px;
+  background: #0D0D0D;
+  border-radius: 1px;
+  animation: smile 1.2s ease-in-out infinite;
+}
+
+.robot-torso {
+  width: 16px;
+  height: 14px;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 2px;
+  border: 2px solid #3B2F2F;
+  position: relative;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+}
+
+.robot-panel {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(59, 47, 47, 0.6);
+  border: 1px solid #3B2F2F;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 1px;
+}
+
+.robot-arms {
+  position: absolute;
+  width: 28px;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+}
+
+.robot-arm {
+  width: 4px;
+  height: 8px;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 2px;
+  border: 1px solid #3B2F2F;
+  animation: armWave 0.8s ease-in-out infinite;
+}
+
+.robot-arm.left {
+  animation-delay: 0s;
+}
+
+.robot-arm.right {
+  animation-delay: 0.2s;
+}
+
+.robot-legs {
+  position: absolute;
+  width: 14px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+}
+
+.robot-leg {
+  flex: 1;
+  height: 8px;
+  background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+  border-radius: 1px;
+  border: 1px solid #3B2F2F;
+  animation: legBounce 0.6s ease-in-out infinite;
+}
+
+.robot-leg.left {
+  animation-delay: 0s;
+}
+
+.robot-leg.right {
+  animation-delay: 0.1s;
+}
+
+@keyframes robotDash {
+  0% {
+    left: var(--start-x);
+    top: var(--start-y);
+    opacity: 0.85;
+  }
+  25% {
+    left: calc(var(--start-x) + 30vw);
+    top: calc(var(--start-y) - 25vh);
+    opacity: 0.7;
+    transform: scaleX(-1) rotate(15deg);
+  }
+  50% {
+    left: calc(var(--start-x) - 25vw);
+    top: calc(var(--start-y) + 30vh);
+    opacity: 0.75;
+    transform: scaleX(1) rotate(-10deg);
+  }
+  75% {
+    left: calc(var(--start-x) + 20vw);
+    top: calc(var(--start-y) - 15vh);
+    opacity: 0.8;
+    transform: scaleX(-1) rotate(10deg);
+  }
+  100% {
+    left: var(--start-x);
+    top: var(--start-y);
+    opacity: 0.85;
+    transform: scaleX(1) rotate(0deg);
+  }
+}
+
+@keyframes headBob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes eyeBlink {
+  0%, 90%, 100% {
+    scaleY: 1;
+  }
+  95% {
+    scaleY: 0.1;
+  }
+}
+
+@keyframes smile {
+  0%, 100% {
+    width: 6px;
+    opacity: 1;
+  }
+  50% {
+    width: 7px;
+    opacity: 0.8;
+  }
+}
+
+@keyframes armWave {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-30deg) translateY(-2px);
+  }
+  50% {
+    transform: rotate(30deg) translateY(2px);
+  }
+  75% {
+    transform: rotate(-25deg) translateY(-1px);
+  }
+}
+
+@keyframes legBounce {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.8);
+  }
+}
+
 @keyframes dashAround {
   0% {
     left: var(--start-x);

@@ -4,6 +4,7 @@ import { HealthCheck } from './components/HealthCheck'
 import { Hamburger } from './components/Hamburger'
 import { Sidebar } from './components/Sidebar'
 import { CircuitNodes } from './components/CircuitNodes'
+import { RobotWorkers } from './components/RobotWorkers'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -17,6 +18,7 @@ function App() {
   return (
     <div>
       <CircuitNodes />
+      <RobotWorkers />
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="content-wrapper">
