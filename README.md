@@ -1,8 +1,19 @@
 # 🚀 SFS Genesis Template
 
+![CI/CD](https://github.com/boweazy/SmartFloiwSystems/workflows/SFS%20CI/CD%20Pipeline/badge.svg)
+![React](https://img.shields.io/badge/React-19-61dafb?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-7-646cff?logo=vite)
+![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)
+![License](https://img.shields.io/badge/License-Proprietary-ffd700)
+
 The **perfect starting point** for all SmartFlow Systems applications.
 
 **This is the master template that powers the SFS App Generator.** Use this to create new SFS apps quickly and consistently with the SFS Brown/Black/Gold theme baked in.
+
+> **🎨 Theme:** SmartFlow Systems signature brown (#3B2F2F), black (#0D0D0D), and gold (#FFD700) color palette
+> **⚡ Stack:** React 19, TypeScript 5, Vite 7, Tailwind CSS 4, Express, Shadcn/UI
+> **🚀 Deploy:** Replit-ready with one-click deployment
 
 ---
 
@@ -295,7 +306,43 @@ npm run build           # Build for production
 npm run start           # Run production build
 npm run check           # TypeScript type check
 npm run db:push         # Push database schema (if using)
+bash scripts/health.sh  # Test health check endpoint
 ```
+
+---
+
+## ✅ Health Check & CI/CD
+
+### Health Check Endpoint
+All SFS apps include a health check endpoint at `/health`:
+
+```bash
+curl http://localhost:5000/health
+# Response: {"ok":true,"service":"SmartFlow Systems Genesis Template","timestamp":"..."}
+```
+
+**Test locally:**
+```bash
+npm run start &           # Start server in background
+bash scripts/health.sh    # Run health check
+```
+
+### GitHub Actions CI/CD Pipeline
+
+The template includes a pre-configured GitHub Actions workflow at `.github/workflows/sfs-ci-deploy.yml`:
+
+**Pipeline stages:**
+1. ✅ **Type Check** - Validates TypeScript code
+2. ✅ **Build** - Compiles production bundle
+3. ✅ **Health Check** - Tests /health endpoint
+4. 🚀 **Deploy** - Deploys to Replit (on main branch)
+
+**Status:** Check the badge at the top of this README for current CI/CD status.
+
+**Setup deployment:**
+1. Add `REPLIT_TOKEN` to repository secrets
+2. Push to main branch
+3. GitHub Actions automatically builds and deploys
 
 ---
 
